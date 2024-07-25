@@ -9,7 +9,7 @@
 [Response Specifications](#response-specifications)<br>
 
 ### Overview
-UPS provides a SDK that helps in creating and refreshing OAuth tokens required when consuming UPS APIs.
+UPS provides a SDK that helps in creating and refreshing OAuth tokens required when consuming [UPS APIs](https://developer.ups.com/catalog).
 
 ### Available SDKs
 - OAuth Token using **Client Credentials** - This allows the client to directly authorize itself using its client ID and secret.

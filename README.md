@@ -27,7 +27,7 @@ Before you can utilize UPS OAuth APIs SDK, you must obtain the following:
 To get an access token using the Client Credentials Flow, follow these steps:
 
 ### Installation
-1.Download the wheel file for the Client Credentials SDK.
+1.Download the files for the Client Credentials SDK [here](https://github.com/UPS-API/UPS-SDKs/tree/Python/UPS.Python.ClientCredentials.Sdk).
 
 2.Install the SDK in your Python Environment `pip install path/to/wheel_file`
 
@@ -53,7 +53,7 @@ class ClientCredentialService
 ### Methods
 | Definition | Description |
 |------------|-------------|
-| GetAccessToken(clientId, clientSecret, headers, customCLaims) | Returns an access token using the provided Client Id, Client Secret, and optinal additional request headers or custom claims. |
+| GetAccessToken(clientId, clientSecret, headers, customClaims) | Returns an access token using the provided Client Id, Client Secret, and optional additional request headers or custom claims. |
 
 ### Example
 
@@ -153,9 +153,9 @@ class ErrorModel
 To get an access token using the Authorization code flow, follow these steps:
 
 ### Installation
-1.Download the wheel file for the Client Credentials SDK.
+1.Download the files for the Auth Code SDK [here](ups_oauth_authcode_sdk-1.0-py3-none-any.whl).
 
-2.Install the SDK in your Python Environment `pip install path/to/wheel_file`
+2.Install the SDK in your Python Environment `pip install path/to/ups_oauth_client_credential_sdk-1.0-py3-none-any.whl`
 
 3.Use the SDK’s built-in `GetAccessToken` method to send a POST request to the _/oauth/token_ endpoint, and then use the access token in your API requests.
 
@@ -177,7 +177,7 @@ A built-in class that contains information for authenticating user and then redi
 | Definition | Description |
 |------------|-------------|
 | login(query_params) | Initiates the OAuth login flow by redirecting the user to the UPS authorization page. Returns a `UpsOauthResponse` containing a `LoginInfo` object which contains the Redirect URI. |
-| get_access_token(client_id, client_secret_, redirect_uri, auth_code) | Returns a `UpsOauthResponse` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, Redirect URI, and an Auth Code |
+| get_access_token(client_id, client_secret, redirect_uri, auth_code) | Returns a `UpsOauthResponse` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, Redirect URI, and an Auth Code |
 | get_access_token_from_refresh_token(client_id, client_secret, refresh_token) | Returns a `UpsOauthResponse` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, and a Refresh Token. |
 
 ***

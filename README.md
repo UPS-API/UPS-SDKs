@@ -12,8 +12,8 @@
 UPS provides a SDK that helps in creating and refreshing OAuth tokens required when consuming [UPS APIs](https://developer.ups.com/catalog).
 
 ### Available SDKs
-- OAuth Token using **Client Credentials** - This allows the client to directly authorize itself using its client ID and secret. [Get the code!](https://github.com/UPS-API/UPS-SDKs/tree/Python/UPS.Python.AuthCode.Sdk)
-- OAuth Token using an **Authorization Code flow** - This involves obtaining an authorization code from UPS authorization server, which is then exchanged for an access token.
+- OAuth Token using **Client Credentials** - This allows the client to directly authorize itself using its client ID and secret. [Get the code!](https://github.com/UPS-API/UPS-SDKs/tree/Python/UPS.Python.ClientCredentials.Sdk)
+- OAuth Token using an **Authorization Code flow** - This involves obtaining an authorization code from UPS authorization server, which is then exchanged for an access token. [Get the code!](https://github.com/UPS-API/UPS-SDKs/tree/Python/UPS.Python.AuthCode.Sdk)
 
 ### Prerequisites
 Before you can utilize UPS OAuth APIs SDK, you must obtain the following: 

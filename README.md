@@ -12,7 +12,7 @@
 UPS provides a SDK that helps in creating and refreshing OAuth tokens required when consuming UPS APIs.
 
 ### Available SDKs
-- OAuth Token using **Client Credentials** - This allows the client to directly authorize itself using its client ID and secret.
+- OAuth Token using **Client Credentials** - This allows the client to directly authorize itself using its client ID and secret. [Get the code!](https://github.com/UPS-API/UPS-SDKs/tree/Go/UPS.Go.ClientCredentials.SDK)
 - OAuth Token using an **Authorization Code flow** - This involves obtaining an authorization code from UPS authorization server, which is then exchanged for an access token. [Get the code!](https://github.com/UPS-API/UPS-SDKs/tree/Go/UPS.Go.AuthCode.SDK)
 
 ### Prerequisites

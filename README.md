@@ -42,20 +42,27 @@ public class ClientCredentialService
 ### Constructors
 | Definition | Description |
 |------------|-------------|
-| ClientCredentialService() | Initializes a new instance of the ClientCredentialService class. |
+| ClientCredentialService(HttpClient) | Initializes a new instance of the ClientCredentialService class. |
 
 
 ### Methods
 | Definition | Description |
 |------------|-------------|
-| getAccessToken(String, String,Dictionary<String, String> , Dictionary<String, String>, Dictionary<String, String>) | Returns an access token using the provided client Id, client Secret, headers, bodyparams and queryparams. |
+| getAccessToken(String, String, Dictionary<String, String> , Dictionary<String, String>, Dictionary<String, String>) | Returns an access token using the provided Client Id, Client Secret, and optional headers and request body. |
 
 ### Example
 
 #### Creating A Token
 ```Java
-String clientId = "YOUR_CLIENT_ID";
-String clientSecret = "YOUR_CLIENT_SECRET";
+// Create an instance of SecureAccessVault
+var securevault = new SecureAccessVault();
+
+// Get ClientID and Client secret from Secure Access Vault
+securevault.getClientIDandSecret();
+
+// Assign ClientID and Secret
+string clientId  = securevault.getClientId();
+string clientSecret  = securevault.getClientSecret();
 
 Dictionary<String, String> headers = new Dictionary<String, String>();
 headers.add("YOUR_HEADER", "YOUR_VALUE");
@@ -63,10 +70,11 @@ headers.add("YOUR_HEADER", "YOUR_VALUE");
 Dictionary<String, String> body = new Dictionary<String, String>();
 body.add("PROPERTY_NAME", "PROPERTY_VALUE");
 
+// Initialize Service
 ClientCredentialService service = new ClientCredentialService();
-public String ExampleTokenMethod() {
-  return service.getAccessToken(clientId, clientSecret, headers, body);
-}
+
+// Get Access Token
+return service.getAccessToken(clientId, clientSecret, headers, body);
 ```
 
 ***
@@ -91,7 +99,7 @@ public class UpsOauthResponse
 |-----------|------|-------------|
 | getResponse() | TokenInfo | Returns a `TokenInfo` object. |
 | setResponse(TokenInfo) | void | Sets the response object. Requires a `TokenInfo` object. |
-| getError() | ErrorResponse | Returns the `ErrorResponse` object in the case of failure. |
+| getError() | ErrorResponse | Returns the `ErrorResponse` object. |
 | setError(ErrorResponse) | void | Sets the `ErrorResponse` object. |
 
 ### TokenInfo Class
@@ -179,7 +187,7 @@ A built-in class that contains information for authenticating user and then redi
 | Definition | Description |
 |------------|-------------|
 |login(Map<String, String>) | Initiates the OAuth login flow by redirecting the user to the UPS authorization page. Returns a `Map<String, String>` that allows additional Query Parameters to be added. |
-|getAccessToken(String, String, String, String, Map<String, String>) | Returns an `APIResponse` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, Redirect URI, an Auth Code, and any additional headers required. |
+|getAccessToken(String, String, String, String, Map<String, String>) | Returns a `APIResponse` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, Redirect URI, an Auth Code, and any additional headers required. |
 |getAccessTokenFromRefreshToken(String, String, String, Map<String, String>) | Returns an `APIResponse` containing a `TokenInfo` object. Requires a Client ID, Client Secret, a Redirect URL, and any additional headers required. |
 
 ### Example
@@ -196,16 +204,23 @@ AuthCodeService service = new AuthCodeService(HttpClient.newHttpClient());
 String accessToken = "";
 String refreshToken = "";
 
-//Create variables for ID and Redirect URI.
-String clientID = "YOUR_CLIENT_ID";
+// Create an instance of SecureAccessVault
+var securevault = new SecureAccessVault();
+
+// Get ClientID and Client secret from Secure Access Vault
+securevault.getClientIDandSecret();
+
+// Assign ClientID and Redirect URI
+string clientId  = securevault.getClientId();
+string clientSecret  = securevault.getClientSecret();
 String redirectUri = "YOUR_REDIRECT_URI";
 ```
 
 #### Logging In
 ```Java
 //Create and add query parameters to request.
-Map<String, String> queryParams = new HashMap<>();
-queryParams.put("client_id", clientID);
+Dictionary<String, String> queryParams = new Dictionary<>();
+queryParams.put("client_id", clientId);
 queryParams.put("redirect_uri", redirectUri);
 queryParams.put("response_type", "code");
 
@@ -215,36 +230,18 @@ CompletableFuture<APIResponse<LoginInfo>> result = service.login(queryParams);
 
 #### Creating A Token
 ```Java
-//clientId The client identifier as a String.
-//clientSecret The client secret as a String.
-//redirectUri The redirect URI as a String, must match the redirect URI used in the authorization request.
-//authCode The authorization code received from the authorization server as a String.
-//headers A {@link Map} containing additional HTTP headers to include in the request.
-//@return A {@link CompletableFuture} that, when completed, will yield an {@link UPSOauthResponse} containing either
-//{@link TokenInfo} with the access token or an error message.    
-public CompletableFuture<UPSOauthResponse<TokenInfo>> getAccessToken(String clientId, String clientSecret, String redirectUri, String authCode, Map<String, String> headers) {
-String url = AuthCodeConstants.TOKEN_URL;
-HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(url))
-   .header("Authorization", "Basic " + Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes()))
-   .header("Content-Type", "application/x-www-form-urlencoded")
-   .POST(buildPostFormData(authCode, redirectUri));});      
+// Get Auth Code from request query string.
+String authCode = "";
+if (authCode != "") {
+  var response = service.getAccessToken(clientId, clientSecret, redirectUri, authCode);
+  accessToken = response.Response.getAccessToken();
+  refreshToken = response.Response.getRefreshToken();
+}   
 ```
 
 #### Refreshing A Token
 ```Java
-//clientId The client identifier as a String.
-//clientSecret The client secret as a String.
-//refreshToken The refresh token as a String.
-//headers A {@link Map} containing additional HTTP headers to include in the request. Can be {@code null}.
-//@return A {@link CompletableFuture} that, when completed, will yield an {@link UPSOauthResponse} containing either
-//{@link TokenInfo} with the new access token or an error message.     
-public CompletableFuture<UPSOauthResponse<TokenInfo>> getAccessTokenFromRefreshToken(String clientId, String clientSecret, String refreshToken, Map<String, String> headers) {
-String asyncResultBody = null;
-HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-  .uri(URI.create(AuthCodeConstants.REFRESH_TOKEN_URL))
-  .header("Authorization", "Basic " + Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes()))
-  .header("Content-Type", "application/x-www-form-urlencoded")
-  .POST(HttpRequest.BodyPublishers.ofString("grant_type=refresh_token&refresh_token=" + refreshToken));
+
 ```
 
 ***
@@ -288,18 +285,29 @@ This class serves as a container for access token information.
 public class TokenInfo
 ```
 
-#### Properties
+#### Methods
 | Definition | Type | Description |
 |------------|-------------|------|
-| issuedAt | String | Issue time of requested token in milliseconds. |
-| tokenType | String | Type of requested access token. |
-| clientId | String | Client id for requested token. |
-| accessToken | String | Token to be used in API requests. |
-| expiresIn | String | Expire time for requested token in seconds. |
-| status | String | Status for requested token. |
-| refreshTokenExpiresIn | String | Expire time for refresh token in seconds. |
-| refreshTokenStatus | String | Status for refresh token. |
-| refreshTokenIssuedAt | String | Time refresh token was issued. |
+| getIssuedAt() | String | Returns the issue time of requested token in milliseconds. |
+| getTokenType() | String | Returns the type of requested access token. |
+| getClientId() | String | Returns the client id for requested token. |
+| getAccessToken() | String | Returns the token to be used in API requests. |
+| getExpiresIn() | String | Returns the expire time for requested token in seconds. |
+| getStatus() | String | Returns the status for requested token. |
+| getRefreshToken() | String | Returns the Refresh Token. |
+| getRefreshTokenExpiresIn() | String | Gets the expiration of the Refresh Token. |
+| getRefreshTokenIssuedAt() | String | Gets the time the Refresh Token was issued. |
+| getRefreshTokenStatus() | String | Gets the status of the Refresh Token. |
+| setIssuedAt(String) | void | Sets the issue time of requested token in milliseconds. |
+| setTokenType(String) | void | Sets the type of requested access token. |
+| setClientId(String) | void | Sets the client id for requested token. |
+| setAccessToken() | void | Sets the token to be used in API requests. |
+| setExpiresIn() | void | Sets the expire time for requested token in seconds. |
+| setStatus() | void | Sets the status for requested token. |
+| setRefreshToken(String) | void | Sets the Refresh Token. |
+| setRefreshTokenExpiresIn(String) | void | Sets the Refresh Token expiry time. |
+| setRefreshTokenIssuedAt(String) | void | Sets the Refresh Token issuance time. |
+| setRefreshTokenStatus(String) | void | Sets the Refresh Token status. |
 
 ### ErrorResponse Class
 

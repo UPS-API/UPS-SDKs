@@ -9,17 +9,16 @@
 [Response Specifications](#response-specifications)<br>
 
 ### Overview
-UPS provides a SDK that helps in creating and refreshing OAuth tokens required when consuming [UPS APIs](https://developer.ups.com/catalog).
+UPS provides an SDK that helps in creating and refreshing OAuth tokens required when consuming UPS APIs.
 
 ### Available SDKs
-- OAuth Token using **Client Credentials** - This allows the client to directly authorize itself using its client ID and secret. [Get the code!](https://github.com/UPS-API/UPS-SDKs/tree/Python/UPS.Python.ClientCredentials.Sdk)
-- OAuth Token using an **Authorization Code flow** - This involves obtaining an authorization code from UPS authorization server, which is then exchanged for an access token. [Get the code!](https://github.com/UPS-API/UPS-SDKs/tree/Python/UPS.Python.AuthCode.Sdk)
+- OAuth Token using **Client Credentials** - This allows the client to directly authorize itself using its client ID and secret.
+- OAuth Token using an **Authorization Code flow** - This involves obtaining an authorization code from the UPS authorization server, which is then exchanged for an access token.
 
 ### Prerequisites
 Before you can utilize UPS OAuth APIs SDK, you must obtain the following: 
 - A UPS developer account. [Get one now!](https://developer.ups.com/)
-- A valid Client ID and Client Secret credentials for your application.
-
+- A valid Client ID and Client Secret credential for your application.
 
 ***
 
@@ -27,12 +26,9 @@ Before you can utilize UPS OAuth APIs SDK, you must obtain the following:
 To get an access token using the Client Credentials Flow, follow these steps:
 
 ### Installation
-1.Download the files for the Client Credentials SDK [here](https://github.com/UPS-API/UPS-SDKs/tree/Python/UPS.Python.ClientCredentials.Sdk).
+1.Download the wheel file for the Client Credentials SDK.
 
 2.Install the SDK in your Python Environment `pip install path/to/wheel_file`
-
-3.Use the SDK’s built-in `GetAccessToken` method to send a POST request to the _/oauth/token_ endpoint, and then use the access token in your API requests.
-
 
 ### ClientCredentialService Class
 
@@ -48,20 +44,22 @@ class ClientCredentialService
 ### Constructors
 | Definition | Description |
 |------------|-------------|
-| ClientCredentialService() | Initializes a new instance of the ClientCredentialService class. |
+| ClientCredentialService(http_client) | Initializes a new instance of the ClientCredentialService class. |
 
 ### Methods
 | Definition | Description |
 |------------|-------------|
-| GetAccessToken(clientId, clientSecret, headers, customClaims) | Returns an access token using the provided Client Id, Client Secret, and optional additional request headers or custom claims. |
+| get_access_token(clientId, clientSecret, headers, customCLaims) | Returns an access token using the provided Client Id, Client Secret, and optinal additional request headers or custom claims. |
 
 ### Example
 
 #### Creating A Token
 ```Python
-# Replace with your actual client Id and client Secret values
-clientId = "YOUR_CLIENT_ID"
-clientSecret = "YOUR_CLIENT_SECRET"
+# Get Client ID and Secret from a secure access vault
+secure_vault = SecureVault()
+secure_vault.get_client_id_and_secret()
+clientId = secure_vault.get_client_id()
+clientSecret = secure_vault.get_client_secret()
 
 # Set additional (if any) values in Http Request Header
 httpRequestHeaders = { "HEADER_NAME":"HEADER_VALUE" }
@@ -69,11 +67,11 @@ httpRequestHeaders = { "HEADER_NAME":"HEADER_VALUE" }
 # Set additional (if any) values in Http Request Body
 httpRequestBody = { "PROPERTY_NAME", "PROPERTY_VALUE" }
 
+# Initialize Client Credentials Service
 clientCredentialService = ClientCredentialService()
 
-response = await clientCredentialService.GetAccessToken(clientId, clientSecret, httpRequestHeaders, httpRequestBody)
+response = await clientCredentialService.get_access_token(clientId, clientSecret, httpRequestHeaders, httpRequestBody)
 ```
-
 
 ## Response Specifications
 
@@ -153,11 +151,9 @@ class ErrorModel
 To get an access token using the Authorization code flow, follow these steps:
 
 ### Installation
-1.Download the files for the Auth Code SDK [here](ups_oauth_authcode_sdk-1.0-py3-none-any.whl).
+1.Download the wheel file for the Client Credentials SDK.
 
-2.Install the SDK in your Python Environment `pip install path/to/ups_oauth_client_credential_sdk-1.0-py3-none-any.whl`
-
-3.Use the SDK’s built-in `GetAccessToken` method to send a POST request to the _/oauth/token_ endpoint, and then use the access token in your API requests.
+2.Install the SDK in your Python Environment `pip install path/to/wheel_file`
 
 ***
 ## AuthCodeService Class
@@ -171,13 +167,13 @@ A built-in class that contains information for authenticating user and then redi
 ### Constructors
 | Definition | Description |
 |------------|-------------|
-| AuthCodeService(aiohttp) | Initializes a new instance of the `AuthCodeService` class. Requires an Http Client |
+| AuthCodeService(http_client) | Initializes a new instance of the `AuthCodeService` class. Requires an Http Client |
 
 ### Methods
 | Definition | Description |
 |------------|-------------|
 | login(query_params) | Initiates the OAuth login flow by redirecting the user to the UPS authorization page. Returns a `UpsOauthResponse` containing a `LoginInfo` object which contains the Redirect URI. |
-| get_access_token(client_id, client_secret, redirect_uri, auth_code) | Returns a `UpsOauthResponse` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, Redirect URI, and an Auth Code |
+| get_access_token(client_id, client_secret_, redirect_uri, auth_code) | Returns a `UpsOauthResponse` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, Redirect URI, and an Auth Code |
 | get_access_token_from_refresh_token(client_id, client_secret, refresh_token) | Returns a `UpsOauthResponse` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, and a Refresh Token. |
 
 ***
@@ -196,8 +192,13 @@ service = AuthCodeService(aiohttp)
 accessToken = ""
 refreshToken = ""
 
-# Initialize variables for credentials and Redirect URI.
-clientID = "YOUR_CLIENT_ID"
+# Get Client ID and Secret from a secure access vault
+secure_vault = SecureVault()
+secure_vault.get_client_id_and_secret()
+clientId = secure_vault.get_client_id()
+clientSecret = secure_vault.get_client_secret()
+
+# Initialize redirect URI
 redirectUri = "YOUR_REDIRECT_URI"
 ```
 
@@ -205,7 +206,7 @@ redirectUri = "YOUR_REDIRECT_URI"
 ```Python
 # Initialize and add query parameters to request.
 queryParams = {}
-queryParams["client_id"] = clientID
+queryParams["client_id"] = clientId
 queryParams["redirect_uri"] = redirectUri
 queryParams["response_type"] = "code"
 
@@ -288,6 +289,10 @@ class TokenInfo:
 | access_token | Token to be used in API requests. |
 | expires_in | Expire time for requested token in seconds. |
 | status | Status for requested token. |
+| refresh_token | The Refresh Token used to renew the Access Token. |
+| refresh_token_status | The Refresh Token Status. |
+| refresh_token_expires_in | The time that the Refresh Token will expire. |
+| refresh_token_issued_at | The time that the Refresh Token was issued. |
 
 
 ### ErrorResponse Class
@@ -303,7 +308,7 @@ class ErrorResponse
 #### Properties
 | Definition | Description |
 |------------|-------------|
-| errors | A list of errors. |
+| errors | A list of `ErrorModel`. |
 
 ### ErrorModel Class
 

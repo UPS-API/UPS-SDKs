@@ -39,15 +39,15 @@ public class ClientCredentialService
 ### Constructors
 | Definition | Description |
 |------------|-------------|
-| ClientCredentialService(HttpClient) | Initializes a new instance of the ClientCredentialService class. |
+| ClientCredentialService(HttpClient httpClient) | Initializes a new instance of the ClientCredentialService class. |
 
 ### Methods
 | Definition | Description |
 |------------|-------------|
-| GetAccessToken(string, string) | Returns a token using only the provided id and secret |
-| GetAccessToken(string, string, Dictionary<string, string>) | Returns a token using the provided id, secret, and additional request headers. |
-| GetAccessToken(string, string, null, Dictionary<string, string>) | Returns a token using the provided id, secret, and additional request body properties|
-| GetAccessToken(string, string, Dictionary<string, string>, Dictionary<string, string>) | Returns a token using the provided id, secret, additional request headers, and additional requesty body properties |
+| GetAccessToken(string clientId, string clientSecret) | Returns a token using only the provided id and secret |
+| GetAccessToken(string clientId, string clientSecret, Dictionary<string, string> headers) | Returns a token using the provided id, secret, and additional request headers. |
+| GetAccessToken(string clientId, string clientSecret, null, Dictionary<string, string> customClaims)| Returns a token using the provided id, secret, and additional request body properties|
+| GetAccessToken(string clientId, string clientSecret, Dictionary<string, string> headers, Dictionary<string, string> customClaims) | Returns a token using the provided id, secret, additional request headers, and additional requesty body properties |
 
 ### Example
 
@@ -68,15 +68,9 @@ public ExampleController(ILogger<ExampleController> logger, IClientCredentialSer
 
 #### Initializing Variables
 ```C#
-// Create an instance of SecureAccessVault
-var securevault= new SecureAccessVault();
-
-// Get ClientID and Client secret from Secure Access Vault
-securevault.GetClientIDandSecret();
-
-// Assign ClientID and Secret
-string clientId  = securevault.ClientId;
-string clientSecret  = securevault.ClientSecret;
+// Get ClientID and Secret from secure credential vault.
+string clientId  = "YOUR_CLIENT_ID";
+string clientSecret  = "YOUR_CLIENT_SECRET";
 
 // Create variable for optional headers
 Dictionary<string, string> headers = new Dictionary<string, string>()
@@ -202,10 +196,10 @@ public class AuthCodeService
 ### Methods
 | Definition | Description |
 |------------|-------------|
-| Login(HttpContext) | Initiates the OAuth login flow by redirecting the user to the UPS authorization page. Returns a `Task` containing `LoginInfo` which contains the Redirect URI as a string. |
-| Login(HttpContext, Dictionary<string, string>) | Initiates the OAuth login flow by redirecting the user to the UPS authorization page. Returns a `Task` that contains the Redirect URI as a string. Additional Query Parameters may be optionally added. |
-| GetAccessToken(string, string, string, string) | Returns a `Task` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, Redirect URI, and an Auth Code |
-| GetAccessTokenFromRefreshToken(string, string, string) | Returns a `Task` containing a `TokenInfo` object. Requires a Client ID, Client Secret, and a Redirect URL. |
+| Login(HttpContext context) | Initiates the OAuth login flow by redirecting the user to the UPS authorization page. Returns a `Task` containing `LoginInfo` which contains the Redirect URI as a string. |
+| Login(HttpContext context, Dictionary<string, string>? queryParams) | Initiates the OAuth login flow by redirecting the user to the UPS authorization page. Returns a `Task` that contains the Redirect URI as a string. Additional Query Parameters may be optionally added. |
+| GetAccessToken(string clientId, string clientSecret, string redirectUri, string authCode) | Returns a `Task` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, Redirect URI, and an Auth Code |
+| GetAccessTokenFromRefreshToken(string clientId, string clientSecret, string refreshToken) | Returns a `Task` containing a `TokenInfo` object. Requires a Client ID, Client Secret, and a Redirect URL. |
 
 ***
 
@@ -233,15 +227,11 @@ public ExampleController(ILogger<ExampleController> logger, IAuthCodeService ser
 string accessToken = string.Empty;
 string refreshToken = string.Empty;
 
-// Create an instance of SecureAccessVault
-var securevault= new SecureAccessVault();
+// Get ClientID and Secret from secure credential vault.
+string clientId  = "YOUR_CLIENT_ID";
+string clientSecret  = "YOUR_CLIENT_SECRET";
 
-// Create variables for credentials and Redirect URI.
-securevault.GetClientIDandSecret();
-
-// Assign ClientID and Secret
-string clientId  = securevault.ClientId;
-string clientSecret  = securevault.ClientSecret;
+// Initialize redirect uri
 string redirectUri = "YOUR_REDIRECT_URI";
 ```
 

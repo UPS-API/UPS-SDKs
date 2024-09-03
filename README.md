@@ -51,8 +51,8 @@ package clientcredential
 #### Creating A Token
 ```Go
 // Initialize Client ID and Secret from secure credential vault.
-clientId := SecureAccessVault.GetCredential("ClientId")
-clientSecret := SecureAccessVault.GetCredential("ClientSecret")
+clientId := "YOUR_CLIENT_ID"
+clientSecret := "YOUR_CLIENT_SECRET"
 
 // Set additional (if any) values in Http Request Header
 var httpRequestHeaders := map[string]string { "HEADER_NAME":"HEADER_VALUE" }
@@ -143,8 +143,8 @@ accessToken := ""
 refreshToken := ""
 
 // Initialize Client ID and Secret from secure credential vault.
-clientId := SecureAccessVault.GetCredential("ClientId")
-clientSecret := SecureAccessVault.GetCredential("ClientSecret")
+clientId := "YOUR_CLIENT_ID"
+clientSecret := "YOUR_CLIENT_SECRET"
 
 // Initialize Redirect URL variable.
 redirectUri := "YOUR_REDIRECT_URI"

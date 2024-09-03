@@ -10,3 +10,8 @@ UPS has developed Software Development Kits (SDKs) to be used as a low-code solu
   - [NodeJs](https://github.com/UPS-API/UPS-SDKs/tree/Node)
   - [PHP](https://github.com/UPS-API/UPS-SDKs/tree/PHP)
   - [Python](https://github.com/UPS-API/UPS-SDKs/tree/Python)
+
+### Prerequisites
+Before you can use the SDK to create an access token, ensure you have:
+- A UPS developer account. [Get one now!](https://developer.ups.com/)
+- A valid Client ID and Client Secret.

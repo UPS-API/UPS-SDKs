@@ -21,6 +21,8 @@ const (
     expectContinueTimeout = 10 * time.Second
     timedOut = `{"response":{"errors":[{"code":"10500","message":"Request Timed out."}]}}`
     internalServerError = `{"response":{"errors":[{"code":"10500","message":"Internal server error"}]}}`
+    contentType           = "Content-Type"
+    contentValue          = "application/x-www-form-urlencoded"
 )
 
 func setHttpClientTimeouts(httpClient *http.Client) *http.Client {
@@ -55,7 +57,7 @@ func setHttpClientTimeouts(httpClient *http.Client) *http.Client {
 }
 
 func Login(httpClient *http.Client, queryParams map[string]string ) (UpsOauthResponse) {
-    var _httpClient *http.Client = setHttpClientTimeouts(httpClient)
+    var hClient *http.Client = setHttpClientTimeouts(httpClient)
         
     urlWithParams, err := url.Parse(loginUrl)
     if err != nil {
@@ -73,8 +75,8 @@ func Login(httpClient *http.Client, queryParams map[string]string ) (UpsOauthRes
         return apiErrorResponse(err.Error())
     }
         
-    req.Header.Set("Content-Type", "application/x-www-form-urlencoded")    
-    res, err := _httpClient.Do(req)
+    req.Header.Set(contentType, contentValue)    
+    res, err := hClient.Do(req)
     if err != nil {
         if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
             return apiErrorResponse(timedOut)
@@ -107,7 +109,7 @@ func Login(httpClient *http.Client, queryParams map[string]string ) (UpsOauthRes
 }
 
 func GetAccessToken(httpClient *http.Client, clientId string, clientSecret string, redirectUri string, authCode string) (UpsOauthResponse) {
-    var _httpClient *http.Client = setHttpClientTimeouts(httpClient)   
+    var hClient *http.Client = setHttpClientTimeouts(httpClient)   
 
     body := url.Values{}
     body.Set("grant_type", "authorization_code")
@@ -122,9 +124,9 @@ func GetAccessToken(httpClient *http.Client, clientId string, clientSecret strin
     }
 
     req.SetBasicAuth(clientId, clientSecret)
-    req.Header.Set("Content-Type", "application/x-www-form-urlencoded")   
+    req.Header.Set(contentType, contentValue)   
 
-    res, err := _httpClient.Do(req)
+    res, err := hClient.Do(req)
     if err != nil {  
         if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
             return apiErrorResponse(timedOut)
@@ -158,10 +160,10 @@ func GetAccessToken(httpClient *http.Client, clientId string, clientSecret strin
 }
 
 func GetAccessTokenFromRefreshToken(httpClient *http.Client, clientId string, clientSecret string, refreshToken string) (UpsOauthResponse) {
-    var _httpClient *http.Client = setHttpClientTimeouts(httpClient)   
+    var hClient *http.Client = setHttpClientTimeouts(httpClient)   
     
     if httpClient == nil {
-        _httpClient = &http.Client {
+        hClient = &http.Client {
             Timeout: timeoutDuration,
             Transport: &http.Transport {
                 TLSHandshakeTimeout: tlsHandshakeTimeout,
@@ -172,7 +174,7 @@ func GetAccessTokenFromRefreshToken(httpClient *http.Client, clientId string, cl
         }
 
     } else {
-        _httpClient = httpClient
+        hClient = httpClient
     }
 
     body := url.Values{}
@@ -187,9 +189,9 @@ func GetAccessTokenFromRefreshToken(httpClient *http.Client, clientId string, cl
     }
 
     req.SetBasicAuth(clientId, clientSecret)
-    req.Header.Set("Content-Type", "application/x-www-form-urlencoded")   
+    req.Header.Set(contentType, contentValue)   
 
-    res, err := _httpClient.Do(req)
+    res, err := hClient.Do(req)
     if err != nil {        
         if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
             return apiErrorResponse(timedOut)

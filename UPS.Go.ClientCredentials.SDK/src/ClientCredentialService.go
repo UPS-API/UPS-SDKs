@@ -53,7 +53,7 @@ func setHttpClientTimeouts(httpClient *http.Client) *http.Client {
 }
 
 func GetAccessToken(httpClient *http.Client, clientId string, clientSecret string, headers map[string]string, customClaims map[string]string) (UpsOauthResponse) {
-    var _httpClient *http.Client = setHttpClientTimeouts(httpClient)
+    var hClient *http.Client = setHttpClientTimeouts(httpClient)
 
     body := url.Values{}
     body.Set("grant_type", "client_credentials")
@@ -77,7 +77,7 @@ func GetAccessToken(httpClient *http.Client, clientId string, clientSecret strin
         req.Header.Set(keys, headers[keys])
     }
 
-    res, err := _httpClient.Do(req)
+    res, err := hClient.Do(req)
     if err != nil {
         if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
             return apiErrorResponse(timedOut)

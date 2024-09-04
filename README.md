@@ -228,14 +228,18 @@ class TokenInfo:
 ```
 
 #### Properties
-| Definition | Description |
-|------------|-------------|
-| issued_at | Issue time of requested token in milliseconds. |
-| token_type | Type of requested access token. |
-| client_id | Client id for requested token. |
-| access_token | Token to be used in API requests. |
-| expires_in | Expire time for requested token in seconds. |
-| status | Status for requested token. |
+| Definition | Type | Description |
+|------------|------|-------------|
+| Issued_at | string | Issue time of requested token in milliseconds. |
+| Token_type | string | Type of requested Access Token. |
+| Client_id | string | Client id for requested token. |
+| Access_token | string | Token to be used in API requests. |
+| Expires_in | string | Expire time for requested token in seconds. |
+| Status | string | Status for requested token. |
+| Refresh_token | string | Refresh token to renew the Access Token |
+| Refresh_token_expires_in | string | The time the Refresh Token will expire. |
+| Refresh_token_status | string | The status of the Refresh Token. |
+| RedirectURI | string | The redirect uri |
 
 
 ### ErrorResponse Class

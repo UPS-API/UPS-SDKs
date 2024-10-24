@@ -12,8 +12,8 @@
 UPS provides an SDK to help generate and refresh OAuth Tokens which are needed when consuming UPS APIs.
 
 ### Available SDKs
-- Create OAuth Token using Client Credentials. [Get the Nuget Package.](https://github.com/UPS-API/UPS-SDKs/pkgs/nuget/UPS.DotNet.AuthCode.SDK)
-- Create OAuth Token using an Auth Code and SSO. [Get the Nuget Package.](https://github.com/UPS-API/UPS-SDKs/pkgs/nuget/UPS.DotNet.ClientCredentials.SDK)
+- Create OAuth Token using Client Credentials. [Get the Nuget Package.](https://github.com/UPS-API/UPS-SDKs/pkgs/nuget/UPS.DotNet.ClientCredentials.SDK)
+- Create OAuth Token using an Auth Code and SSO. [Get the Nuget Package.](https://github.com/UPS-API/UPS-SDKs/pkgs/nuget/UPS.DotNet.AuthCode.SDK)
 
 ### Prerequisites
 Before you can use the SDK to create an access token, ensure you have:

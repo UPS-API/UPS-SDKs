@@ -12,8 +12,8 @@
 UPS provides an SDK to help generate and refresh OAuth Tokens which are needed when consuming UPS APIs.
 
 ### Available SDKs
-- OAuth Token using **Client Credentials** - This allows the client to directly authorize itself using its client ID and secret. [Get the xxxx Package.](https://github.com/UPS-API/UPS-SDKs/pkgs/nuget/UPS.DotNet.AuthCode.SDK)
-- OAuth Token using an **Authorization Code flow** - This involves obtaining an authorization code from UPS authorization server, which is then exchanged for an access token. [Get the xxxx Package.](https://github.com/UPS-API/UPS-SDKs/pkgs/nuget/UPS.DotNet.ClientCredentials.SDK)
+- OAuth Token using **Client Credentials** - This allows the client to directly authorize itself using its client ID and secret. [Get the Package.](https://github.com/UPS-API/UPS-SDKs/pkgs/nuget/UPS.DotNet.AuthCode.SDK)
+- OAuth Token using an **Authorization Code flow** - This involves obtaining an authorization code from UPS authorization server, which is then exchanged for an access token. [Get the Package.](https://github.com/UPS-API/UPS-SDKs/pkgs/nuget/UPS.DotNet.ClientCredentials.SDK)
 
 ### Prerequisites
 Before you can utilize UPS OAuth APIs SDK, you must obtain the following: 

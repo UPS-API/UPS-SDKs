@@ -27,7 +27,7 @@ Before you can utilize UPS OAuth APIs SDK, you must obtain the following:
 To get an access token using the Client Credentials Flow, follow these steps:
 
 ### Installation
-`mvn install`
+`composer require ups-api/php-oauth-client-credentials-sdk`
 
 ### ClientCredentialService Class
 
@@ -42,13 +42,13 @@ class ClientCredentialService
 ### Constructors
 | Definition | Description |
 |------------|-------------|
-| ClientCredentialService() | Initializes a new instance of the ClientCredentialService class. |
+| ClientCredentialService($httpClient) | Initializes a new instance of the ClientCredentialService class with $httpClient instance. |
 
 
 ### Methods
 | Definition | Description |
 |------------|-------------|
-| getAccessToken(String, String,Dictionary<String, String> , Dictionary<String, String>, Dictionary<String, String>) | Returns an access token using the provided client Id, client Secret, headers, bodyparams and queryparams. |
+| getAccessToken(String, String, Array , Array) | Returns an access token using the provided client Id, client Secret, headers, bodyparams. |
 
 ### Example
 
@@ -56,13 +56,17 @@ class ClientCredentialService
 ```PHP
 String $clientId = "YOUR_CLIENT_ID";
 String $clientSecret = "YOUR_CLIENT_SECRET";
-Dictionary<String, String> $headers = new Dictionary<String, String>();
-$headers.add("YOUR_HEADER", "YOUR_VALUE");
-Dictionary<String, String> $customClaims = new Dictionary<String, String>();
-$customClaims.add("PROPERTY_NAME", "PROPERTY_VALUE");
-ClientCredentialService service = new ClientCredentialService();
+$headers = array();
+$headers["YOUR_HEADER"] = "YOUR_VALUE";
+
+$customClaims = array();
+$customClaims["YOUR_CUSTOMCLAIMS"] = "YOUR_VALUE";
+
+$httpClient = new HttpClient();
+
+ClientCredentialService service = new ClientCredentialService($httpClient);
 public String ExampleTokenMethod() {
-  return service.generateToken(clientId, clientSecret, headers, body);
+  return service.generateToken(clientId, clientSecret, $headers, $customClaims);
 }
 ```
 
@@ -156,7 +160,7 @@ class ErrorModel
 To get an access token using the Authorization code flow, follow these steps:
 
 ### Installation
-`mvn install`
+`composer require ups-api/php-oauth-authcode-sdk`
 ***
 ## AuthCodeService Class
 
@@ -175,66 +179,51 @@ A built-in class that contains information for authenticating user and then redi
 ### Methods
 | Definition | Description |
 |------------|-------------|
-|login(Map<String, String>) | Initiates the OAuth login flow by redirecting the user to the UPS authorization page. Returns a `Map<String, String>` that allows additional Query Parameters to be added. |
-|getAccessToken(String, String, String, String, Map<String, String>) | Returns an `APIResponse` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, Redirect URI, an Auth Code, and any additional headers required. |
-|getAccessTokenFromRefreshToken(String, String, String, Map<String, String>) | Returns an `APIResponse` containing a `TokenInfo` object. Requires a Client ID, Client Secret, a Redirect URL, and any additional headers required. |
+|login(Array) | Initiates the OAuth login flow by redirecting the user to the UPS authorization page. This method accepts Query params as an Array and returns redirection URL when successful. |
+|getAccessToken(String, String, String, String) | Returns an `APIResponse` containing a `TokenInfo` object when successful. Requires a Client ID, Client Secret, Redirect URI, an Auth Code, and any additional headers required. |
+|getAccessTokenFromRefreshToken(String, String, String) | Returns an `APIResponse` containing a `TokenInfo` object. Requires a Client ID, Client Secret, a Redirect URL, and any additional headers required. |
 
 ### Example
 
 #### Initialize Variables
 ```PHP
-//Create variables to store Access and Refresh Tokens.
+//Create Service object, variables to store Access and Refresh Tokens.
 String access_token = "";
 String refresh_token = "";
 
 //Create variables for ID and Redirect URI.
 String $clientID = "YOUR_CLIENT_ID";
 String $redirectUri = "YOUR_REDIRECT_URI";
+
+ $httpClient = new HttpClient();
+ $authCodeService = new AuthCodeService($httpClient);
 ```
 
 #### Logging In
 ```PHP
 //Create and add query parameters to request.
-$response = $this->post_for_token_info(AuthCodeConstants::TOKEN_URL, $body, $client_id, $client_secret);
+$queryparams = array();
+$queryparams["client_id"] = "Your Client Id";
+$queryparams["redirect_uri"] = "Your Redirection URL";
+$queryparams["response_type"] = "code";
 
 //Login
-public function login_response($redirect_uri) {
-        $login_info = new LoginInfo($redirect_uri);
-        return (new UpsOauthResponse($login_info->to_dict(), null))->to_dict();
-    }
+ $response= $authCodeService->login($queryparams);
 ```
 
 #### Creating A Token
 ```PHP
- public function get_access_token($client_id, $client_secret, $redirect_uri, $auth_code) {
-        try {
-            $body = array(
-                "grant_type" => "authorization_code",
-                "redirect_uri" => $redirect_uri,
-                "code" => $auth_code
-            );
-            $response = $this->post_for_token_info(AuthCodeConstants::TOKEN_URL, $body, $client_id, $client_secret);
-            return json_encode($response);
-        } catch (Exception $e) {
-            return $this->api_error_response(AuthCodeConstants::INTERNAL_SERVER_ERROR);
-        }
-    }   
+ $response= $authCodeService->get_access_token('Your Client ID'
+        ,'Your Client Secret',
+        'Your Redirection URL','Code received after successful Login');  
 ```
 
 #### Refreshing A Token
 ```PHP
-public function get_access_token_from_refresh_token($client_id, $client_secret, $refresh_token) {
-        try {
-            $body = array(
-                "grant_type" => "refresh_token",
-                "refresh_token" => $refresh_token
-            );
-            $response = $this->post_for_token_info(AuthCodeConstants::REFRESH_TOKEN_URL, $body, $client_id, $client_secret);
-            return json_encode($response);
-        } catch (Exception $e) {
-            return $this->api_error_response(AuthCodeConstants::INTERNAL_SERVER_ERROR);
-        }
-    }
+$response= $authCodeService->get_access_token_from_refresh_token('Your Client ID'
+        ,'Your Client Secret',
+        'Your Redirection URL','Code received after successful Login');  
+
 ```
 
 ***
@@ -258,15 +247,13 @@ class UpsOauthResponse
 | Definition | Type | Description |
 |------------|-------------|------|
 | Response | T | Provides access to information about the token. |
-| Error | ErrorResponse | Contains a list of errors from an unsuccessful API call. |
+| Error | Contains a list of errors from an unsuccessful API call. |
 
 #### Methods
 |Definition | Type | Description |
 |-----------|------|-------------|
-| getResponse() | T | Returns the response object. |
-| setResponse(T) | void | Sets the response object. |
-| getError() | ErrorResponse | Returns the `ErrorResponse` object in the case of failure. |
-| setError(ErrorResponse) | void | Sets the `ErrorResponse` object. |
+| to_dict() | Returns the array as response containing "response" and "error". |
+| 
 
 ### TokenInfo Class
 
@@ -281,36 +268,20 @@ class TokenInfo
 #### Properties
 | Definition | Type | Description |
 |------------|-------------|------|
-| issuedAt | String | Issue time of requested token in milliseconds. |
-| tokenType | String | Type of requested access token. |
-| clientId | String | Client id for requested token. |
-| accessToken | String | Token to be used in API requests. |
-| expiresIn | String | Expire time for requested token in seconds. |
+| issued_at | String | Issue time of requested token in milliseconds. |
+| token_type | String | Type of requested access token. |
+| client_id | String | Client id for requested token. |
+| access_token | String | Token to be used in API requests. |
+| expires_in | String | Expire time for requested token in seconds. |
 | status | String | Status for requested token. |
-| refreshTokenExpiresIn | String | Expire time for refresh token in seconds. |
-| refreshTokenStatus | String | Status for refresh token. |
-| refreshTokenIssuedAt | String | Time refresh token was issued. |
-
-### ErrorResponse Class
-
-#### About
-This class contains a list of errors that occurred when attempting to create an access token.
-
-#### Definition
-```PHP
-class ErrorResponse
-```
-
-#### Methods
-| Definition | Type | Description |
-|------------|------|-------------|
-| getErrors() | List<ErrorModel> | Returns a list of errors. |
-| setErrors(List<ErrorModel>) | void | Sets a list of errors. |
+| refresh_token_expires_in | String | Expire time for refresh token in seconds. |
+| refresh_token_status | String | Status for refresh token. |
+| refresh_token_issued_at | String | Time refresh token was issued. |
 
 ### ErrorModel Class
 
 #### About
-This class contains an error code and message based on the response during access token creation.
+This class used to set error code and corrosponding error message on the error response during access token creation.
 
 #### Definition
 ```PHP
@@ -320,10 +291,7 @@ class ErrorModel
 #### Methods
 | Definition | Type | Description |
 |------------|-------------|------|
-| getCode() | String | Returns the error code. |
-| setCode(String) | void | Sets the error code. |
-| getMessage() | String | Returns the error message. |
-| setMessage(String) | String | Returns the error message. |
+| constructor(string, string) | Array | Set the error code and message. |
 
 ### LoginInfo Class
 

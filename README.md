@@ -19,7 +19,7 @@ UPS provides an SDK to help generate and refresh OAuth Tokens which are needed w
 Before you can utilize UPS OAuth APIs SDK, you must obtain the following: 
 - A UPS developer account. [Get one now!](https://developer.ups.com/)
 - A valid client ID and client Secret credentials for your application.
-
+- GitHub Packages as a package source for Nuget Package Manager. *This package is not available at nuget.org. For more information look [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry)
 
 ***
 
@@ -27,6 +27,53 @@ Before you can utilize UPS OAuth APIs SDK, you must obtain the following:
 To get an access token using the Client Credentials Flow, follow these steps:
 
 ### Installation
+Modify your *~.m2/settings.xml* file:
+```
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <activeProfiles>
+    <activeProfile>github</activeProfile>
+  </activeProfiles>
+
+  <profiles>
+    <profile>
+      <id>github</id>
+      <repositories>
+        <repository>
+          <id>github</id>
+          <url>https://maven.pkg.github.com/ups-api/ups-sdks</url>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+
+  <servers>
+    <server>
+      <id>github</id>
+      <username>USERNAME</username>
+      <password>TOKEN</password>
+    </server>
+  </servers>
+</settings>
+```
+
+Add the package to your POM dependencies:
+```
+<dependency>
+  <groupId>ups-sdks</groupId>
+  <artifactId>java-sdk-clientcredential</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+Install the package
+
 `mvn install`
 
 ### ClientCredentialService Class

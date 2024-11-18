@@ -180,6 +180,10 @@ public class ErrorModel
 Create an OAuth Token using an Auth Code.
 
 ### Installation
+Add GitHubPackages as a package source from the command line:
+
+`dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/ups-api/index.json"`
+
 To install from the command line:
 
 `dotnet add package UPS.DotNet.AuthCode.SDK`

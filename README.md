@@ -19,6 +19,7 @@ UPS provides an SDK to help generate and refresh OAuth Tokens which are needed w
 Before you can use the SDK to create an access token, ensure you have:
 - A UPS developer account. [Get one now!](https://developer.ups.com/)
 - A valid Client ID and Client Secret.
+- GitHub Packages as a package source for Nuget Package Manager. *This package is **not** available at nuget.org
 ***
 
 # OAuth Using Client Credentials
@@ -27,6 +28,10 @@ Before you can use the SDK to create an access token, ensure you have:
 Create an OAuth Token using Client Credentials
 
 ### Installation
+Add GitHubPackages as a package source from the command line:
+
+`dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/ups-api/index.json"`
+
 To install from the command line:
 
 `dotnet add package UPS.DotNet.ClientCredentials.SDK`

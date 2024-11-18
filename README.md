@@ -19,6 +19,7 @@ UPS provides an SDK to help generate and refresh OAuth Tokens which are needed w
 Before you can use the SDK to create an access token, ensure you have:
 - A UPS developer account. [Get one now!](https://developer.ups.com/)
 - A valid Client ID and Client Secret.
+- GitHub Packages as a package source for Node Package Manager. *This package is not available from npmjs. For more information look [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry)
 ***
 
 # OAuth Using Client Credentials
@@ -27,9 +28,12 @@ Before you can use the SDK to create an access token, ensure you have:
 Create an OAuth Token using Client Credentials
 
 ### Installation
-To install from the command line:
+Install from `package.json`:
 
-`npm install @ups-api/client-credentials-sdk`
+``` Javascript
+"@ups-api/oauth-client-credentials-sdk": "1.0.0"
+```
+
 
 ### Definition
 ```Typescript
@@ -163,9 +167,11 @@ export class ErrorModel
 Create an OAuth Token using an Auth Code.
 
 ### Installation
-To install from the command line:
+Install from `package.json`:
 
-`npm install @ups-api/authcode-sdk`
+```
+"@ups-api/oauth-authcode-sdk": "1.0.0"
+```
 
 ***
 

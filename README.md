@@ -27,7 +27,7 @@ Before you can utilize UPS OAuth APIs SDK, you must obtain the following:
 To get an access token using the Client Credentials Flow, follow these steps:
 
 ### Installation
-1. Include package in your project.
+1. Copy the code from this repository.
 2. Use the SDK’s built-in `GetAccessToken` method to send a POST request to the _/oauth/token_ endpoint, and then use the access token in your API requests.
 
 
@@ -110,11 +110,8 @@ type TokenInfo struct
 To get an access token using the Authorization code flow, follow these steps:
 
 ### Installation
-1.Download the wheel file for the Client Credentials SDK.
-
-2.Install the SDK in your Python Environment `pip install path/to/wheel_file`
-
-3.Use the SDK’s built-in `GetAccessToken` method to send a POST request to the _/oauth/token_ endpoint, and then use the access token in your API requests.
+1. Copy the code from this repository.
+2. Use the SDK’s built-in `GetAccessToken` method to send a POST request to the _/oauth/token_ endpoint, and then use the access token in your API requests.
 
 ***
 ## AuthCodeService Class

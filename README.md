@@ -49,7 +49,7 @@ httpRequestHeaders = { "HEADER_NAME":"HEADER_VALUE" }
 # Set additional (if any) values in Http Request Body
 httpRequestBody = { "PROPERTY_NAME", "PROPERTY_VALUE" }
 # Initialize Client Credentials Service
-clientCredentialService = ClientCredentialService()
+clientCredentialService = ClientCredentialService(http_client)
 response = await clientCredentialService.get_access_token(clientId, clientSecret, httpRequestHeaders, httpRequestBody)
 ```
 ## Response Specifications

@@ -1,0 +1,36 @@
+{
+  "name": "@ups-api/oauth-authcode-sdk",
+  "version": "1.0.0",
+  "description": "OAuth Authcode work flow to retrieve token information",
+  "main": "dist/index.js",
+  "module": "dist/index.m.js",
+  "unpkg": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "require": "./dist/index.js",
+    "default": "./dist/index.modern.js"
+  },
+  "scripts": {
+    "build": "rimraf dist && microbundle --tsconfig tsconfig.json --no-sourcemap",
+    "dev": "microbundle --watch --tsconfig tsconfig.json --no-sourcemap"
+  },
+  "keywords": [],
+  "author": "UPS",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "microbundle": "0.15.0",
+    "rimraf": "^5.0.5"
+  },
+  "dependencies": {
+    "axios": "^1.7.3",
+    "express": "^4.19.2",
+    "isomorphic-unfetch": "^3.1.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}

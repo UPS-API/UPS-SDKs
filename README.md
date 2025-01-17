@@ -28,12 +28,7 @@ Before you can use the SDK to create an access token, ensure you have:
 Create an OAuth Token using Client Credentials
 
 ### Installation
-Install from `package.json`:
-
-``` Javascript
-"@ups-api/oauth-client-credentials-sdk": "1.0.0"
-```
-
+Copy the `ups-oauth-client-credentials-sdk` folder and use it in your project.
 
 ### Definition
 ```Typescript
@@ -167,11 +162,7 @@ export class ErrorModel
 Create an OAuth Token using an Auth Code.
 
 ### Installation
-Install from `package.json`:
-
-```
-"@ups-api/oauth-authcode-sdk": "1.0.0"
-```
+Copy the `ups-oauth-auth-code-sdk` folder and use it in your project.
 
 ***
 

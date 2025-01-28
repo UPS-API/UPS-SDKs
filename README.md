@@ -27,7 +27,7 @@ Before you can utilize UPS OAuth APIs SDK, you must obtain the following:
 To get an access token using the Client Credentials Flow, follow these steps:
 
 ### Installation
-`composer require ups-api/php-oauth-client-credentials-sdk`
+Copy the UPS_PHP_ClientCredential_Sdk folder and use the available code in your project.
 
 ### ClientCredentialService Class
 
@@ -160,8 +160,9 @@ class ErrorModel
 To get an access token using the Authorization code flow, follow these steps:
 
 ### Installation
-`composer require ups-api/php-oauth-authcode-sdk`
-***
+Copy the UPS_PHP_AuthCode_Sdk folder and use the available code in your project.
+
+
 ## AuthCodeService Class
 
 ### Definition

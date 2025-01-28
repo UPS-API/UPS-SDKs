@@ -55,10 +55,10 @@ clientId := "YOUR_CLIENT_ID"
 clientSecret := "YOUR_CLIENT_SECRET"
 
 // Set additional (if any) values in Http Request Header
-var httpRequestHeaders := map[string]string { "HEADER_NAME":"HEADER_VALUE" }
+httpRequestHeaders := map[string]string { "HEADER_NAME":"HEADER_VALUE" }
 
 // Set additional (if any) values in Http Request Body
-var httpRequestBody := map[string]string { "PROPERTY_NAME", "PROPERTY_VALUE" }
+httpRequestBody := map[string]string { "PROPERTY_NAME", "PROPERTY_VALUE" }
 
 response = clientCredentialService.GetAccessToken(clientId, clientSecret, httpRequestHeaders, httpRequestBody)
 ```

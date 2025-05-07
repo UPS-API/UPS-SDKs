@@ -11,55 +11,68 @@ class TokenInfo {
 
     // Getters and Setters
 
-    public function getIssuedAt() {
+    public function getIssuedAt() 
+    {
         return $this->issued_at;
     }
 
-    public function setIssuedAt($issued_at) {
+    public function setIssuedAt($issued_at) 
+    {
         $this->issued_at = $issued_at;
     }
 
-    public function getTokenType() {
+    public function getTokenType() 
+    {
         return $this->token_type;
     }
 
-    public function setTokenType($token_type) {
+    public function setTokenType($token_type) 
+    {
         $this->token_type = $token_type;
     }
 
-    public function getClientId() {
+    public function getClientId() 
+    {
         return $this->client_id;
     }
 
-    public function setClientId($client_id) {
+    public function setClientId($client_id) 
+    {
         $this->client_id = $client_id;
     }
 
-    public function getAccessToken() {
+    public function getAccessToken() 
+    {
         return $this->access_token;
     }
 
-    public function setAccessToken($access_token) {
+    public function setAccessToken($access_token) 
+    {
         $this->access_token = $access_token;
     }
 
-    public function getExpiresIn() {
+    public function getExpiresIn() 
+    {
         return $this->expires_in;
     }
 
-    public function setExpiresIn($expires_in) {
+    public function setExpiresIn($expires_in) 
+    {
         $this->expires_in = $expires_in;
     }
 
-    public function getStatus() {
+    public function getStatus() 
+    {
         return $this->status;
     }
 
-    public function setStatus($status) {
+    public function setStatus($status) 
+    {
         $this->status = $status;
     }
 
-    public function to_dict() {
+    public function to_dict() 
+    {
         return array(
             "issued_at" => $this->getIssuedAt(),
             "token_type" => $this->getTokenType(),

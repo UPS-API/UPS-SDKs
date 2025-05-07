@@ -28,13 +28,17 @@ class TokenInfo {
     }
 }
 
-class LoginInfo {
+class LoginInfo 
+{
     public $redirect_uri;
+
     public function __construct($redirect_uri)
     {
         $this->redirect_uri = $redirect_uri;
     }
-    public function to_dict() {
+
+    public function to_dict() 
+    {
         return array(
             "redirect_uri" => $this->redirect_uri
         );

@@ -61,6 +61,7 @@ class ErrorResponse
         $error->setMessage($message);
         $this->errors[] = $error;
     }
+    
     public function to_dict()
     {
         $errorsArray = [];

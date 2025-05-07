@@ -21,34 +21,34 @@ class ClientCredentialService
     }
 
     public function getAccessToken($clientId, $clientSecret, $headers, $customClaims)
-{
-    try {
-        $url = $this->jwtTokenUrlGlobal;
+    {
+        try {
+            $url = $this->jwtTokenUrlGlobal;
 
-        $postFields = $this->buildPostFormData($customClaims);
-        $authorization = "Basic " . base64_encode("$clientId:$clientSecret");
+            $postFields = $this->buildPostFormData($customClaims);
+            $authorization = "Basic " . base64_encode("$clientId:$clientSecret");
 
-        $options = [
-            "Content-Type: application/x-www-form-urlencoded",
-            "Authorization: $authorization"
-        ];
+            $options = [
+                "Content-Type: application/x-www-form-urlencoded",
+                "Authorization: $authorization"
+            ];
 
-        $response = $this->httpClient->post($url, array_merge($options, $this->convertHeadersToArray($headers)), $postFields);
+            $response = $this->httpClient->post($url, array_merge($options, $this->convertHeadersToArray($headers)), $postFields);
 
-        error_log("HTTP response: " . print_r($response, true));
+            error_log("HTTP response: " . print_r($response, true));
 
-        if ($response['status_code'] == 200) {
-            return $this->apiResponse($response['response']);
-        } else {
-            return $this->apiErrorResponse($response['response']);
+            if ($response['status_code'] == 200) {
+                return $this->apiResponse($response['response']);
+            } else {
+                return $this->apiErrorResponse($response['response']);
+            }
+        } catch (\Exception $ex) {
+            if ($ex instanceof \Exception) {
+                return $this->apiErrorResponse(ClientCredentialConstants::TimedOut);
+            }
+            return $this->apiErrorResponse(ClientCredentialConstants::InternalServerError);
         }
-    } catch (\Exception $ex) {
-        if ($ex instanceof \Exception) {
-            return $this->apiErrorResponse(ClientCredentialConstants::TimedOut);
-        }
-        return $this->apiErrorResponse(ClientCredentialConstants::InternalServerError);
     }
-}
 
     private function buildPostFormData($customClaims)
     {
@@ -82,36 +82,37 @@ class ClientCredentialService
 
 
     public function apiErrorResponse($jsonData)
-{
-    $responseStr = $jsonData;
-    $errorResponse = json_decode(str_replace("'", '"', $responseStr), true);
+    {
+        $responseStr = $jsonData;
+        $errorResponse = json_decode(str_replace("'", '"', $responseStr), true);
 
-    error_log("Parsed error response: " . print_r($errorResponse, true));
+        error_log("Parsed error response: " . print_r($errorResponse, true));
 
-    $errorResponseObj = new ErrorResponse();
+        $errorResponseObj = new ErrorResponse();
 
-    if (is_array($errorResponse)) {
-        if (isset($errorResponse['errors'])) {
-            foreach ($errorResponse['errors'] as $error) {
-                if (isset($error['code']) && isset($error['message'])) {
-                    $errorResponseObj->addErrorMessage($error['code'], $error['message']);
-                } else {
-            
-                    error_log("Error entry missing code or message: " . print_r($error, true));
+        if (is_array($errorResponse)) {
+            if (isset($errorResponse['errors'])) {
+                foreach ($errorResponse['errors'] as $error) {
+                    if (isset($error['code']) && isset($error['message'])) {
+                        $errorResponseObj->addErrorMessage($error['code'], $error['message']);
+                    } else {
+                
+                        error_log("Error entry missing code or message: " . print_r($error, true));
+                    }
                 }
+            } else {
+                $errorResponseObj->addErrorMessage('Unknown', '' . json_encode($errorResponse));
             }
         } else {
-            $errorResponseObj->addErrorMessage('Unknown', '' . json_encode($errorResponse));
+            error_log("Error response is not an array: " . print_r($errorResponse, true));
+            $errorResponseObj->addErrorMessage('Unknown', 'Error response is not an array');
         }
-    } else {
-        error_log("Error response is not an array: " . print_r($errorResponse, true));
-        $errorResponseObj->addErrorMessage('Unknown', 'Error response is not an array');
+
+        error_log("Populated ErrorResponse: " . print_r($errorResponseObj->to_dict(), true));
+
+        return new UPSOauthResponse(null, $errorResponseObj);
     }
-
-    error_log("Populated ErrorResponse: " . print_r($errorResponseObj->to_dict(), true));
-
-    return new UPSOauthResponse(null, $errorResponseObj);
-}
+    
     private function convertHeadersToArray($headers)
     {
         $headerArray = [];

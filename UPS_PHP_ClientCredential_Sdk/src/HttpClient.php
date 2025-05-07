@@ -5,7 +5,8 @@ class HttpClient
 {
     private $timeout;
     
-    public function __construct($timeout = 15) {
+    public function __construct($timeout = 15) 
+    {
         $this->timeout = $timeout;
     }
 

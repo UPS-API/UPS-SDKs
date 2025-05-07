@@ -8,6 +8,7 @@ require_once 'HttpClient.php';
 class AuthCodeService
 {
     private $httpClient;
+
     public function __construct($httpClient) 
     {  
         $this->httpClient = $httpClient;
@@ -33,7 +34,8 @@ class AuthCodeService
         }
     }
    
-    public function get_access_token($client_id, $client_secret, $redirect_uri, $auth_code) {
+    public function get_access_token($client_id, $client_secret, $redirect_uri, $auth_code) 
+    {
         try {
             $body = array(
                 "grant_type" => "authorization_code",
@@ -47,7 +49,8 @@ class AuthCodeService
         }
     }
 
-    public function post_for_token_info($url, $body, $clientId, $clientSecret) {
+    public function post_for_token_info($url, $body, $clientId, $clientSecret) 
+    {
         try {
             $httpHeaders = array(
                 "Content-Type: application/x-www-form-urlencoded",
@@ -67,7 +70,8 @@ class AuthCodeService
         }
     }
 
-    public function get_access_token_from_refresh_token($client_id, $client_secret, $refresh_token) {
+    public function get_access_token_from_refresh_token($client_id, $client_secret, $refresh_token) 
+    {
         try {
             $body = array(
                 "grant_type" => "refresh_token",
@@ -79,7 +83,9 @@ class AuthCodeService
             return $this->api_error_response(AuthCodeConstants::INTERNAL_SERVER_ERROR);
         }
     }
-    public function build_url_with_query_params($base_url, $query_params) {
+
+    public function build_url_with_query_params($base_url, $query_params) 
+    {
         if ($query_params == null) {
             return $base_url;
         }
@@ -109,7 +115,8 @@ class AuthCodeService
         return api_error_response($response);
     }
 
-    public function api_error_response($json_data) {
+    public function api_error_response($json_data) 
+    {
         $error_response = json_decode(str_replace("'", '"', $json_data));
         //checking error object format
         if(isset($error_response->response->errors)){
@@ -123,12 +130,14 @@ class AuthCodeService
         return (new UpsOauthResponse(null, $api_error_info))->to_dict();
     }
    
-    public function login_response($redirect_uri) {
+    public function login_response($redirect_uri) 
+    {
         $login_info = new LoginInfo($redirect_uri);
         return (new UpsOauthResponse($login_info->to_dict(), null))->to_dict();
     }
    
-    public function login_error_response($json_data) {
+    public function login_error_response($json_data) 
+    {
         $error_response = json_decode($json_data);
         $login_error_info = new ErrorModel(
             $error_response->response->errors[0]->code,

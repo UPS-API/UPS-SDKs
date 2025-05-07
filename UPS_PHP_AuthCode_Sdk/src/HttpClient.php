@@ -2,8 +2,10 @@
 namespace UpsPhpAuthCodeSdk;
 require_once 'AuthCodeConstants.php';
 
-class HttpClient {
-    public function post($url, $headers, $postFields, $requestType) {
+class HttpClient 
+{
+    public function post($url, $headers, $postFields, $requestType) 
+    {
         $ch = curl_init();
         if($requestType == 'GET'){
             curl_setopt($ch, CURLOPT_URL, $url);

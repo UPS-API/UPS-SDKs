@@ -54,20 +54,25 @@ class ClientCredentialService
 
 #### Creating A Token
 ```PHP
-String $clientId = "YOUR_CLIENT_ID";
-String $clientSecret = "YOUR_CLIENT_SECRET";
-$headers = array();
+<?php
+
+namespace YourVendor\YourModule;
+
+use UpsPhpClientCredentialSdk\HttpClient;
+use UpsPhpClientCredentialSdk\ClientCredentialService;
+
+$clientId = "YOUR_CLIENT_ID";
+$clientSecret = "YOUR_CLIENT_SECRET";
+$headers = [];
 $headers["YOUR_HEADER"] = "YOUR_VALUE";
 
-$customClaims = array();
+$customClaims = [];
 $customClaims["YOUR_CUSTOMCLAIMS"] = "YOUR_VALUE";
 
 $httpClient = new HttpClient();
 
-ClientCredentialService service = new ClientCredentialService($httpClient);
-public String ExampleTokenMethod() {
-  return service.generateToken(clientId, clientSecret, $headers, $customClaims);
-}
+$service = new ClientCredentialService($httpClient);
+return $service->getAccessToken($clientId, $clientSecret, $headers, $customClaims);
 ```
 
 ***
